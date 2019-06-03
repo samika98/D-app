@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    
+
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+
+</head>
+
+<body>
+<div class="tabs">
+    <ul class="tab-links">
+        <li class="active"><a href="#tab1">Individjual Registration</a></li>
+        <li><a href="#tab2">Voter Registration</a></li>
+        <li><a href="#tab3">Submit Proposal</a></li>
+        <li><a href="#tab4">Vote</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="tab1" class="tab active">
+            <form action="pop.php" method="post">
+            <input type="text" name="nsmr" placeholder="Name"><br><br>
+                        <input type="text" name="nsmr" placeholder="Aadhar"><br><br>
+            <input type="text" name="nsmr" placeholder="Id"><br><br>
+            <input type="text" name="nsmr" placeholder="Account Address"><br><br>
+            <input type="text" name="nsmr" placeholder="Proxy"><br><br>
+
+            <input type="submit" name="sub">
+            
+            </form>
+
+            </div>
+
+        <div id="tab2" class="tab">
+                <form action="pop.php" method="post">
+            <input type="text" name="nsmr" placeholder="Name"><br><br>
+                        <input type="text" name="nsmr" placeholder="Aadhar"><br><br>
+            <input type="text" name="nsmr" placeholder="Id"><br><br>
+            <input type="text" name="nsmr" placeholder="Account Address"><br><br>
+
+            <input type="submit" name="sub">
+            
+            </form></div>
+
+        <div id="tab3" class="tab">
+        
+ <input type="file" name="imagep" id="pic" value = "Attach file" class="btn btn-primary" > </input><br><br>
+ <textarea>Or a 30-100 word proposal</textarea><br><br>
+            <input type="submit" name="sub">
+
+        </div>
+
+        <div id="tab4" class="tab">
+                <form action="pop.php" method="post">
+            <input type="text" name="nsmr" placeholder="Praposal ID"><br><br>
+                        <input type="text" name="nsmr" placeholder="Voter Address"><br><br>
+            
+
+            <input type="submit" name="sub">
+            
+            </form> </div>
+    </div>
+</div>
+<style>
+.tabs {
+    width:100%;
+    display:inline-block;
+}
+
+    .tab-links:after {
+    display:block;
+    clear:both;
+    content:'';
+}
+
+.tab-links li {
+    margin:0px 5px;
+    float:left;
+    list-style:none;
+}
+
+.tab-links a {
+    padding:9px 15px;
+    display:inline-block;
+    border-radius:3px 3px 0px 0px;
+    background:#7FB5DA;
+    font-size:16px;
+    font-weight:600;
+    color:#4c4c4c;
+    transition:all linear 0.15s;
+}
+
+.tab-links a:hover {
+    background:#a7cce5;
+    text-decoration:none;
+}
+
+li.active a, li.active a:hover {
+    background:#fff;
+    color:#4c4c4c;
+}
+
+.tab-content {
+    padding:15px;
+    border-radius:3px;
+    box-shadow:-1px 1px 1px rgba(0,0,0,0.15);
+    background:#fff;
+}
+
+.tab {
+    display:none;
+}
+
+.tab.active {
+    display:block;
+}
+
+</style>
+
+<script>
+
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+        }
+
+    </script>
+
+      <script>
+
+
+        web3.eth.defaultAccount = web3.eth.accounts[0];
+        var BallotContract = web3.eth.contract([
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "toIndividual",
+                "type": "address"
+            },
+            {
+                "name": "toVoter",
+                "type": "address"
+            }
+        ],
+        "name": "registerIndividual",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "toVoter",
+                "type": "address"
+            }
+        ],
+        "name": "registerVoter",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "toProposal",
+                "type": "uint8"
+            }
+        ],
+        "name": "vote",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_numProposals",
+                "type": "uint8"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "stage",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint8"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "winningProposal",
+        "outputs": [
+            {
+                "name": "_winningProposal",
+                "type": "uint8"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    }
+]);
+        var Ballot = BallotContract.at('0x0bb557f973d673f50e1821833267b2bc04059df3');
+        console.log(Ballot);
+
+
+    </script>
+
+<
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+             <script type="text/javascript">
+jQuery(document).ready(function() {
+    jQuery('.tabs .tab-links a').on('click', function(e) {
+        var currentAttrValue = jQuery(this).attr('href');
+
+        jQuery('.tabs ' + currentAttrValue).show().siblings().hide();
+
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+
+        e.preventDefault();
+    });
+});
+</script>
+ 
